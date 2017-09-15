@@ -1,4 +1,4 @@
-# Implementation of (RARED) algorithm in Linux kernel
+# Implementation of RARED algorithm in Linux kernel
 ## Course Code: CS822	<br/>
 ## Assignment: #FP8	<br/>
 
