@@ -158,11 +158,11 @@ int big_key_preparse(struct key_preparsed_payload *prep)
 		 * File content is stored encrypted with randomly generated key.
 		 */
 		size_t enclen = datalen + ENC_AUTHTAG_SIZE;
+		loff_t pos = 0;
 
 		data = kmalloc(enclen, GFP_KERNEL);
 		if (!data)
 			return -ENOMEM;
-
 		memcpy(data, prep->data, datalen);
 
 		/* generate random key */
@@ -187,7 +187,7 @@ int big_key_preparse(struct key_preparsed_payload *prep)
 			goto err_enckey;
 		}
 
-		written = kernel_write(file, data, enclen, 0);
+		written = kernel_write(file, data, enclen, &pos);
 		if (written != enclen) {
 			ret = written;
 			if (written >= 0)
@@ -247,7 +247,7 @@ void big_key_revoke(struct key *key)
 
 	/* clear the quota */
 	key_payload_reserve(key, 0);
-	if (key_is_instantiated(key) &&
+	if (key_is_positive(key) &&
 	    (size_t)key->payload.data[big_key_len] > BIG_KEY_FILE_THRESHOLD)
 		vfs_truncate(path, 0);
 }
@@ -279,7 +279,7 @@ void big_key_describe(const struct key *key, struct seq_file *m)
 
 	seq_puts(m, key->description);
 
-	if (key_is_instantiated(key))
+	if (key_is_positive(key))
 		seq_printf(m, ": %zu [%s]",
 			   datalen,
 			   datalen > BIG_KEY_FILE_THRESHOLD ? "file" : "buff");
@@ -303,6 +303,7 @@ long big_key_read(const struct key *key, char __user *buffer, size_t buflen)
 		u8 *data;
 		u8 *enckey = (u8 *)key->payload.data[big_key_data];
 		size_t enclen = datalen + ENC_AUTHTAG_SIZE;
+		loff_t pos = 0;
 
 		data = kmalloc(enclen, GFP_KERNEL);
 		if (!data)
@@ -315,7 +316,7 @@ long big_key_read(const struct key *key, char __user *buffer, size_t buflen)
 		}
 
 		/* read file to kernel and decrypt */
-		ret = kernel_read(file, 0, data, enclen);
+		ret = kernel_read(file, data, enclen, &pos);
 		if (ret >= 0 && ret != enclen) {
 			ret = -EIO;
 			goto err_fput;

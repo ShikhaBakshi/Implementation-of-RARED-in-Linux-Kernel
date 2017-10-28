@@ -37,6 +37,7 @@ deps_kernel/bounds.s := \
   include/linux/compiler.h \
     $(wildcard include/config/trace/branch/profiling.h) \
     $(wildcard include/config/profile/all/branches.h) \
+    $(wildcard include/config/stack/validation.h) \
     $(wildcard include/config/kasan.h) \
     $(wildcard include/config/enable/must/check.h) \
     $(wildcard include/config/enable/warn/deprecated.h) \
@@ -44,7 +45,6 @@ deps_kernel/bounds.s := \
     $(wildcard include/config/arch/supports/optimized/inlining.h) \
     $(wildcard include/config/optimize/inlining.h) \
     $(wildcard include/config/gcov/kernel.h) \
-    $(wildcard include/config/stack/validation.h) \
     $(wildcard include/config/arch/use/builtin/bswap.h) \
   arch/x86/include/asm/posix_types.h \
     $(wildcard include/config/x86/32.h) \
@@ -63,6 +63,7 @@ deps_kernel/bounds.s := \
     $(wildcard include/config/preempt/voluntary.h) \
     $(wildcard include/config/debug/atomic/sleep.h) \
     $(wildcard include/config/prove/locking.h) \
+    $(wildcard include/config/arch/has/refcount.h) \
     $(wildcard include/config/panic/timeout.h) \
     $(wildcard include/config/tracing.h) \
     $(wildcard include/config/ftrace/mcount/record.h) \
@@ -111,6 +112,7 @@ deps_kernel/bounds.s := \
   include/asm-generic/bitops/le.h \
   arch/x86/include/uapi/asm/byteorder.h \
   include/linux/byteorder/little_endian.h \
+    $(wildcard include/config/cpu/big/endian.h) \
   include/uapi/linux/byteorder/little_endian.h \
   include/linux/swab.h \
   include/uapi/linux/swab.h \
@@ -153,8 +155,8 @@ deps_kernel/bounds.s := \
     $(wildcard include/config/force/max/zoneorder.h) \
     $(wildcard include/config/cma.h) \
     $(wildcard include/config/memory/isolation.h) \
-    $(wildcard include/config/zsmalloc.h) \
     $(wildcard include/config/numa.h) \
+    $(wildcard include/config/zsmalloc.h) \
     $(wildcard include/config/memcg.h) \
     $(wildcard include/config/zone/dma.h) \
     $(wildcard include/config/zone/dma32.h) \
@@ -192,6 +194,7 @@ deps_kernel/bounds.s := \
   include/linux/lockdep.h \
     $(wildcard include/config/lockdep.h) \
     $(wildcard include/config/lock/stat.h) \
+    $(wildcard include/config/lockdep/crossrelease.h) \
     $(wildcard include/config/trace/irqflags.h) \
   include/linux/rwlock_types.h \
 

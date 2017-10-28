@@ -15,6 +15,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
   include/linux/compiler.h \
     $(wildcard include/config/trace/branch/profiling.h) \
     $(wildcard include/config/profile/all/branches.h) \
+    $(wildcard include/config/stack/validation.h) \
     $(wildcard include/config/kasan.h) \
     $(wildcard include/config/enable/must/check.h) \
     $(wildcard include/config/enable/warn/deprecated.h) \
@@ -22,7 +23,6 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/arch/supports/optimized/inlining.h) \
     $(wildcard include/config/optimize/inlining.h) \
     $(wildcard include/config/gcov/kernel.h) \
-    $(wildcard include/config/stack/validation.h) \
     $(wildcard include/config/arch/use/builtin/bswap.h) \
   include/uapi/linux/types.h \
   arch/x86/include/uapi/asm/types.h \
@@ -79,6 +79,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/debug/atomic/sleep.h) \
     $(wildcard include/config/mmu.h) \
     $(wildcard include/config/prove/locking.h) \
+    $(wildcard include/config/arch/has/refcount.h) \
     $(wildcard include/config/panic/timeout.h) \
     $(wildcard include/config/tracing.h) \
     $(wildcard include/config/ftrace/mcount/record.h) \
@@ -103,6 +104,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
   include/asm-generic/bitops/le.h \
   arch/x86/include/uapi/asm/byteorder.h \
   include/linux/byteorder/little_endian.h \
+    $(wildcard include/config/cpu/big/endian.h) \
   include/uapi/linux/byteorder/little_endian.h \
   include/linux/swab.h \
   include/uapi/linux/swab.h \
@@ -223,6 +225,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
   include/linux/thread_info.h \
     $(wildcard include/config/thread/info/in/task.h) \
     $(wildcard include/config/debug/stack/usage.h) \
+    $(wildcard include/config/debug/kmemleak.h) \
     $(wildcard include/config/have/arch/within/stack/frames.h) \
     $(wildcard include/config/hardened/usercopy.h) \
   include/linux/restart_block.h \
@@ -235,6 +238,26 @@ deps_arch/x86/kernel/asm-offsets.s := \
   arch/x86/include/asm/page_types.h \
     $(wildcard include/config/physical/start.h) \
     $(wildcard include/config/physical/align.h) \
+  include/linux/mem_encrypt.h \
+    $(wildcard include/config/arch/has/mem/encrypt.h) \
+    $(wildcard include/config/amd/mem/encrypt.h) \
+  arch/x86/include/asm/mem_encrypt.h \
+  arch/x86/include/uapi/asm/bootparam.h \
+  include/linux/screen_info.h \
+  include/uapi/linux/screen_info.h \
+  include/linux/apm_bios.h \
+  include/uapi/linux/apm_bios.h \
+  include/uapi/linux/ioctl.h \
+  arch/x86/include/uapi/asm/ioctl.h \
+  include/asm-generic/ioctl.h \
+  include/uapi/asm-generic/ioctl.h \
+  include/linux/edd.h \
+  include/uapi/linux/edd.h \
+  arch/x86/include/asm/ist.h \
+  arch/x86/include/uapi/asm/ist.h \
+  include/video/edid.h \
+    $(wildcard include/config/x86.h) \
+  include/uapi/video/edid.h \
   arch/x86/include/asm/page_64_types.h \
     $(wildcard include/config/randomize/memory.h) \
     $(wildcard include/config/randomize/base.h) \
@@ -305,16 +328,14 @@ deps_arch/x86/kernel/asm-offsets.s := \
   arch/x86/include/asm/string_64.h \
     $(wildcard include/config/arch/has/uaccess/flushcache.h) \
   arch/x86/include/uapi/asm/msr.h \
-  include/uapi/linux/ioctl.h \
-  arch/x86/include/uapi/asm/ioctl.h \
-  include/asm-generic/ioctl.h \
-  include/uapi/asm-generic/ioctl.h \
   include/linux/tracepoint-defs.h \
   include/linux/static_key.h \
   arch/x86/include/asm/paravirt.h \
   arch/x86/include/asm/frame.h \
   arch/x86/include/asm/special_insns.h \
   arch/x86/include/asm/fpu/types.h \
+  arch/x86/include/asm/unwind_hints.h \
+  arch/x86/include/asm/orc_types.h \
   include/linux/personality.h \
   include/uapi/linux/personality.h \
   include/linux/math64.h \
@@ -331,13 +352,13 @@ deps_arch/x86/kernel/asm-offsets.s := \
   include/linux/spinlock_types.h \
   include/linux/lockdep.h \
     $(wildcard include/config/lock/stat.h) \
+    $(wildcard include/config/lockdep/crossrelease.h) \
   include/linux/rwlock_types.h \
   arch/x86/include/asm/spinlock.h \
   arch/x86/include/asm/qspinlock.h \
   include/asm-generic/qspinlock.h \
   arch/x86/include/asm/qrwlock.h \
   include/asm-generic/qrwlock.h \
-    $(wildcard include/config/cpu/big/endian.h) \
   include/linux/rwlock.h \
   include/linux/spinlock_api_smp.h \
     $(wildcard include/config/inline/spin/lock.h) \
@@ -381,6 +402,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
   include/linux/page-flags-layout.h \
   include/generated/bounds.h \
   include/linux/memory_hotplug.h \
+    $(wildcard include/config/arch/has/add/pages.h) \
     $(wildcard include/config/have/arch/nodedata/extension.h) \
     $(wildcard include/config/have/bootmem/info/node.h) \
   include/linux/notifier.h \
@@ -447,6 +469,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/rcu/fanout.h) \
     $(wildcard include/config/rcu/fanout/leaf.h) \
   include/linux/completion.h \
+    $(wildcard include/config/lockdep/completions.h) \
   arch/x86/include/asm/mmzone.h \
   arch/x86/include/asm/mmzone_64.h \
   arch/x86/include/asm/smp.h \
@@ -458,18 +481,6 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/x86/mpparse.h) \
   arch/x86/include/asm/mpspec_def.h \
   arch/x86/include/asm/x86_init.h \
-  arch/x86/include/uapi/asm/bootparam.h \
-  include/linux/screen_info.h \
-  include/uapi/linux/screen_info.h \
-  include/linux/apm_bios.h \
-  include/uapi/linux/apm_bios.h \
-  include/linux/edd.h \
-  include/uapi/linux/edd.h \
-  arch/x86/include/asm/ist.h \
-  arch/x86/include/uapi/asm/ist.h \
-  include/video/edid.h \
-    $(wildcard include/config/x86.h) \
-  include/uapi/video/edid.h \
   arch/x86/include/asm/apicdef.h \
   arch/x86/include/asm/apic.h \
     $(wildcard include/config/x86/x2apic.h) \
@@ -506,13 +517,19 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/no/generic/pci/ioport/map.h) \
     $(wildcard include/config/generic/pci/iomap.h) \
   include/xen/xen.h \
-    $(wildcard include/config/xen/dom0.h) \
     $(wildcard include/config/xen/pvh.h) \
+    $(wildcard include/config/xen/dom0.h) \
   include/xen/interface/xen.h \
   arch/x86/include/asm/xen/interface.h \
   arch/x86/include/asm/xen/interface_64.h \
   arch/x86/include/asm/pvclock-abi.h \
   arch/x86/include/asm/xen/hypervisor.h \
+  include/asm-generic/io.h \
+    $(wildcard include/config/virt/to/bus.h) \
+  include/linux/vmalloc.h \
+  include/linux/llist.h \
+    $(wildcard include/config/arch/have/nmi/safe/cmpxchg.h) \
+  include/linux/rbtree.h \
   arch/x86/include/uapi/asm/vsyscall.h \
   include/asm-generic/fixmap.h \
   arch/x86/include/asm/io_apic.h \
@@ -524,15 +541,10 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/sched/smt.h) \
   include/linux/smp.h \
     $(wildcard include/config/up/late/init.h) \
-  include/linux/llist.h \
-    $(wildcard include/config/arch/have/nmi/safe/cmpxchg.h) \
   include/linux/percpu.h \
     $(wildcard include/config/need/per/cpu/embed/first/chunk.h) \
     $(wildcard include/config/need/per/cpu/page/first/chunk.h) \
   include/linux/kmemleak.h \
-    $(wildcard include/config/debug/kmemleak.h) \
-  include/linux/vmalloc.h \
-  include/linux/rbtree.h \
   include/linux/kasan.h \
   include/linux/uaccess.h \
   include/linux/sched.h \
@@ -556,7 +568,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/block.h) \
     $(wildcard include/config/task/xacct.h) \
     $(wildcard include/config/cpusets.h) \
-    $(wildcard include/config/intel/rdt/a.h) \
+    $(wildcard include/config/intel/rdt.h) \
     $(wildcard include/config/futex.h) \
     $(wildcard include/config/perf/events.h) \
     $(wildcard include/config/task/delay/acct.h) \
@@ -579,12 +591,19 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/multiuser.h) \
     $(wildcard include/config/user/ns.h) \
   include/linux/highuid.h \
+  include/linux/rhashtable.h \
+  include/linux/jhash.h \
+  include/linux/unaligned/packed_struct.h \
+  include/linux/list_nulls.h \
   include/uapi/linux/ipc.h \
   arch/x86/include/uapi/asm/ipcbuf.h \
   include/uapi/asm-generic/ipcbuf.h \
+  include/linux/refcount.h \
+    $(wildcard include/config/refcount/full.h) \
   arch/x86/include/uapi/asm/sembuf.h \
   include/linux/shm.h \
   include/uapi/linux/shm.h \
+  include/uapi/asm-generic/hugetlb_encode.h \
   arch/x86/include/uapi/asm/shmbuf.h \
   include/uapi/asm-generic/shmbuf.h \
   arch/x86/include/asm/shmparam.h \
@@ -692,8 +711,6 @@ deps_arch/x86/kernel/asm-offsets.s := \
   arch/x86/include/uapi/asm/stat.h \
   include/uapi/linux/stat.h \
   include/linux/kref.h \
-  include/linux/refcount.h \
-    $(wildcard include/config/refcount/full.h) \
   arch/x86/include/asm/hw_irq.h \
     $(wildcard include/config/hpet/timer.h) \
     $(wildcard include/config/dmar/table.h) \
@@ -713,10 +730,12 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/pm/autosleep.h) \
     $(wildcard include/config/arch/save/page/keys.h) \
   include/linux/swap.h \
+    $(wildcard include/config/device/private.h) \
     $(wildcard include/config/migration.h) \
     $(wildcard include/config/memory/failure.h) \
     $(wildcard include/config/frontswap.h) \
     $(wildcard include/config/swap.h) \
+    $(wildcard include/config/thp/swap.h) \
     $(wildcard include/config/memcg/swap.h) \
   include/linux/memcontrol.h \
     $(wildcard include/config/cgroup/writeback.h) \
@@ -758,8 +777,10 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/have/aligned/struct/page.h) \
     $(wildcard include/config/userfaultfd.h) \
     $(wildcard include/config/have/arch/compat/mmap/bases.h) \
+    $(wildcard include/config/membarrier.h) \
     $(wildcard include/config/aio.h) \
     $(wildcard include/config/mmu/notifier.h) \
+    $(wildcard include/config/hmm.h) \
   include/linux/auxvec.h \
   include/uapi/linux/auxvec.h \
   arch/x86/include/uapi/asm/auxvec.h \
@@ -809,6 +830,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/fanotify.h) \
     $(wildcard include/config/posix/mqueue.h) \
     $(wildcard include/config/bpf/syscall.h) \
+    $(wildcard include/config/net.h) \
   include/linux/ns_common.h \
   include/linux/nsproxy.h \
   include/linux/user_namespace.h \
@@ -850,6 +872,7 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/metag.h) \
     $(wildcard include/config/ia64.h) \
     $(wildcard include/config/stack/growsup.h) \
+    $(wildcard include/config/device/public.h) \
     $(wildcard include/config/shmem.h) \
     $(wildcard include/config/debug/vm/rb.h) \
     $(wildcard include/config/page/poisoning.h) \
@@ -865,11 +888,13 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/debug/page/ref.h) \
   include/linux/page-flags.h \
     $(wildcard include/config/arch/uses/pg/uncached.h) \
-    $(wildcard include/config/thp/swap.h) \
     $(wildcard include/config/ksm.h) \
+  include/linux/memremap.h \
+  include/linux/ioport.h \
   arch/x86/include/asm/pgtable.h \
     $(wildcard include/config/debug/wx.h) \
     $(wildcard include/config/have/arch/soft/dirty.h) \
+    $(wildcard include/config/arch/enable/thp/migration.h) \
   arch/x86/include/asm/pgtable_64.h \
   include/asm-generic/pgtable.h \
   include/linux/huge_mm.h \
@@ -903,7 +928,6 @@ deps_arch/x86/kernel/asm-offsets.s := \
     $(wildcard include/config/of.h) \
     $(wildcard include/config/devtmpfs.h) \
     $(wildcard include/config/sysfs/deprecated.h) \
-  include/linux/ioport.h \
   include/linux/klist.h \
   include/linux/pinctrl/devinfo.h \
     $(wildcard include/config/pm.h) \

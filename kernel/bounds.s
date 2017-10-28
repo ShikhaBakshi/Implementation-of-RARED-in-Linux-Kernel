@@ -90,7 +90,7 @@
 	.globl	foo
 	.type	foo, @function
 foo:
-.LFB134:
+.LFB140:
 	.file 1 "kernel/bounds.c"
 	.loc 1 16 0
 	.cfi_startproc
@@ -128,7 +128,7 @@ foo:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE134:
+.LFE140:
 	.size	foo, .-foo
 	.section	.text.unlikely
 .LCOLDE0:
@@ -139,19 +139,20 @@ foo:
 .Letext_cold0:
 	.file 2 "./include/linux/page-flags.h"
 	.file 3 "./include/linux/mmzone.h"
-	.file 4 "./include/linux/printk.h"
-	.file 5 "./include/linux/kernel.h"
+	.file 4 "./arch/x86/include/asm/asm.h"
+	.file 5 "./include/linux/printk.h"
+	.file 6 "./include/linux/kernel.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x20b
+	.long	0x218
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF59
-	.byte	0x1
 	.long	.LASF60
+	.byte	0x1
 	.long	.LASF61
+	.long	.LASF62
 	.quad	.Ltext0
 	.quad	.Letext0-.Ltext0
 	.long	.Ldebug_line0
@@ -327,7 +328,7 @@ foo:
 	.byte	0x4
 	.long	0x50
 	.byte	0x3
-	.value	0x125
+	.value	0x12c
 	.long	0x1a6
 	.uleb128 0x6
 	.long	.LASF49
@@ -352,44 +353,51 @@ foo:
 	.string	"foo"
 	.byte	0x1
 	.byte	0xf
-	.quad	.LFB134
-	.quad	.LFE134-.LFB134
+	.quad	.LFB140
+	.quad	.LFE140-.LFB140
 	.uleb128 0x1
 	.byte	0x9c
 	.uleb128 0x9
-	.long	0x49
-	.long	0x1ca
-	.uleb128 0xa
-	.byte	0
-	.uleb128 0xb
 	.long	.LASF55
 	.byte	0x4
-	.byte	0x3e
-	.long	0x1bf
+	.byte	0x90
+	.long	0x65
+	.uleb128 0x1
+	.byte	0x57
+	.uleb128 0xa
+	.long	0x49
+	.long	0x1d7
+	.uleb128 0xb
+	.byte	0
 	.uleb128 0xc
 	.long	.LASF56
 	.byte	0x5
-	.value	0x1c7
-	.long	0x49
-	.uleb128 0x9
-	.long	0x7a
-	.long	0x1ec
-	.uleb128 0xa
-	.byte	0
-	.uleb128 0xc
+	.byte	0x3e
+	.long	0x1cc
+	.uleb128 0xd
 	.long	.LASF57
-	.byte	0x5
-	.value	0x215
-	.long	0x1f8
-	.uleb128 0x4
-	.long	0x1e1
-	.uleb128 0xc
+	.byte	0x6
+	.value	0x1e3
+	.long	0x49
+	.uleb128 0xa
+	.long	0x7a
+	.long	0x1f9
+	.uleb128 0xb
+	.byte	0
+	.uleb128 0xd
 	.long	.LASF58
-	.byte	0x5
-	.value	0x220
-	.long	0x209
+	.byte	0x6
+	.value	0x231
+	.long	0x205
 	.uleb128 0x4
-	.long	0x1e1
+	.long	0x1ee
+	.uleb128 0xd
+	.long	.LASF59
+	.byte	0x6
+	.value	0x23c
+	.long	0x216
+	.uleb128 0x4
+	.long	0x1ee
 	.byte	0
 	.section	.debug_abbrev,"",@progbits
 .Ldebug_abbrev0:
@@ -508,6 +516,23 @@ foo:
 	.byte	0
 	.byte	0
 	.uleb128 0x9
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x3f
+	.uleb128 0x19
+	.uleb128 0x2
+	.uleb128 0x18
+	.byte	0
+	.byte	0
+	.uleb128 0xa
 	.uleb128 0x1
 	.byte	0x1
 	.uleb128 0x49
@@ -516,12 +541,12 @@ foo:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0xa
+	.uleb128 0xb
 	.uleb128 0x21
 	.byte	0
 	.byte	0
 	.byte	0
-	.uleb128 0xb
+	.uleb128 0xc
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -538,7 +563,7 @@ foo:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0xc
+	.uleb128 0xd
 	.uleb128 0x34
 	.byte	0
 	.uleb128 0x3
@@ -571,7 +596,7 @@ foo:
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF59:
+.LASF60:
 	.ascii	"GNU C89 5.4.0 20160609 -mno-sse -mno-mmx -mno-sse2 -mno-3dno"
 	.ascii	"w -mno-avx -m64 -mno-80387 -mno-fp-ret-in-387 -mpreferred-st"
 	.ascii	"ack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone"
@@ -584,9 +609,7 @@ foo:
 	.string	"PG_checked"
 .LASF52:
 	.string	"ZONE_MOVABLE"
-.LASF0:
-	.string	"signed char"
-.LASF58:
+.LASF59:
 	.string	"hex_asc_upper"
 .LASF33:
 	.string	"PG_uncached"
@@ -600,15 +623,15 @@ foo:
 	.string	"__NR_PAGEFLAGS"
 .LASF5:
 	.string	"long long int"
-.LASF61:
-	.string	"/home/kajoljain/Desktop/Implementation-of-RARED-in-Linux-Kernel"
+.LASF0:
+	.string	"signed char"
 .LASF25:
 	.string	"PG_private_2"
 .LASF16:
 	.string	"PG_dirty"
 .LASF47:
 	.string	"pageflags"
-.LASF60:
+.LASF61:
 	.string	"kernel/bounds.c"
 .LASF10:
 	.string	"long int"
@@ -630,12 +653,14 @@ foo:
 	.string	"PG_private"
 .LASF7:
 	.string	"long unsigned int"
-.LASF55:
+.LASF56:
 	.string	"console_printk"
 .LASF3:
 	.string	"short unsigned int"
 .LASF42:
 	.string	"PG_savepinned"
+.LASF62:
+	.string	"/home/kajoljain/Desktop/linux-master"
 .LASF29:
 	.string	"PG_reclaim"
 .LASF8:
@@ -646,7 +671,7 @@ foo:
 	.string	"PG_writeback"
 .LASF32:
 	.string	"PG_mlocked"
-.LASF56:
+.LASF57:
 	.string	"panic_timeout"
 .LASF45:
 	.string	"PG_double_map"
@@ -660,6 +685,8 @@ foo:
 	.string	"unsigned char"
 .LASF39:
 	.string	"PG_swapcache"
+.LASF55:
+	.string	"current_stack_pointer"
 .LASF2:
 	.string	"short int"
 .LASF49:
@@ -688,7 +715,7 @@ foo:
 	.string	"PG_reserved"
 .LASF18:
 	.string	"PG_active"
-.LASF57:
+.LASF58:
 	.string	"hex_asc"
 .LASF40:
 	.string	"PG_fscache"

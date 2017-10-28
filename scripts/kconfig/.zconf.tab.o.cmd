@@ -60,7 +60,7 @@ deps_scripts/kconfig/zconf.tab.o := \
   /usr/include/locale.h \
   /usr/include/x86_64-linux-gnu/bits/locale.h \
   scripts/kconfig/lkc_proto.h \
-  scripts/kconfig/zconf.hash.c \
+  scripts/kconfig/kconf_id.c \
   scripts/kconfig/zconf.lex.c \
   /usr/include/errno.h \
   /usr/include/x86_64-linux-gnu/bits/errno.h \

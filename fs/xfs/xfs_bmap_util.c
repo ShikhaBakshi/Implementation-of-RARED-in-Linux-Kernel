@@ -84,6 +84,7 @@ xfs_zero_extent(
 		GFP_NOFS, 0);
 }
 
+#ifdef CONFIG_XFS_RT
 int
 xfs_bmap_rtalloc(
 	struct xfs_bmalloca	*ap)	/* bmap alloc argument struct */
@@ -190,6 +191,7 @@ xfs_bmap_rtalloc(
 	}
 	return 0;
 }
+#endif /* CONFIG_XFS_RT */
 
 /*
  * Check if the endoff is outside the last extent. If so the caller will grow
@@ -222,22 +224,21 @@ xfs_bmap_eof(
  * Count leaf blocks given a range of extent records.  Delayed allocation
  * extents are not counted towards the totals.
  */
-STATIC void
+xfs_extnum_t
 xfs_bmap_count_leaves(
 	struct xfs_ifork	*ifp,
-	xfs_extnum_t		*numrecs,
 	xfs_filblks_t		*count)
 {
-	xfs_extnum_t		i;
-	xfs_extnum_t		nr_exts = xfs_iext_count(ifp);
+	struct xfs_bmbt_irec	got;
+	xfs_extnum_t		numrecs = 0, i = 0;
 
-	for (i = 0; i < nr_exts; i++) {
-		xfs_bmbt_rec_host_t *frp = xfs_iext_get_ext(ifp, i);
-		if (!isnullstartblock(xfs_bmbt_get_startblock(frp))) {
-			(*numrecs)++;
-			*count += xfs_bmbt_get_blockcount(frp);
+	while (xfs_iext_get_extent(ifp, i++, &got)) {
+		if (!isnullstartblock(got.br_startblock)) {
+			*count += got.br_blockcount;
+			numrecs++;
 		}
 	}
+	return numrecs;
 }
 
 /*
@@ -370,7 +371,7 @@ xfs_bmap_count_blocks(
 
 	switch (XFS_IFORK_FORMAT(ip, whichfork)) {
 	case XFS_DINODE_FMT_EXTENTS:
-		xfs_bmap_count_leaves(ifp, nextents, count);
+		*nextents = xfs_bmap_count_leaves(ifp, count);
 		return 0;
 	case XFS_DINODE_FMT_BTREE:
 		if (!(ifp->if_flags & XFS_IFEXTENTS)) {
@@ -1136,7 +1137,7 @@ xfs_alloc_file_space(
 		/*
 		 * Complete the transaction
 		 */
-		error = xfs_defer_finish(&tp, &dfops, NULL);
+		error = xfs_defer_finish(&tp, &dfops);
 		if (error)
 			goto error0;
 
@@ -1202,7 +1203,8 @@ xfs_unmap_extent(
 	if (error)
 		goto out_bmap_cancel;
 
-	error = xfs_defer_finish(&tp, &dfops, ip);
+	xfs_defer_ijoin(&dfops, ip);
+	error = xfs_defer_finish(&tp, &dfops);
 	if (error)
 		goto out_bmap_cancel;
 
@@ -1459,7 +1461,19 @@ xfs_shift_file_space(
 		return error;
 
 	/*
-	 * The extent shiting code works on extent granularity. So, if
+	 * Clean out anything hanging around in the cow fork now that
+	 * we've flushed all the dirty data out to disk to avoid having
+	 * CoW extents at the wrong offsets.
+	 */
+	if (xfs_is_reflink_inode(ip)) {
+		error = xfs_reflink_cancel_cow_range(ip, offset, NULLFILEOFF,
+				true);
+		if (error)
+			return error;
+	}
+
+	/*
+	 * The extent shifting code works on extent granularity. So, if
 	 * stop_fsb is not the starting block of extent, we need to split
 	 * the extent at stop_fsb.
 	 */
@@ -1496,7 +1510,7 @@ xfs_shift_file_space(
 		if (error)
 			goto out_bmap_cancel;
 
-		error = xfs_defer_finish(&tp, &dfops, NULL);
+		error = xfs_defer_finish(&tp, &dfops);
 		if (error)
 			goto out_bmap_cancel;
 
@@ -1777,7 +1791,8 @@ xfs_swap_extent_rmap(
 			if (error)
 				goto out_defer;
 
-			error = xfs_defer_finish(tpp, &dfops, ip);
+			xfs_defer_ijoin(&dfops, ip);
+			error = xfs_defer_finish(tpp, &dfops);
 			if (error)
 				goto out_defer;
 
@@ -1953,7 +1968,7 @@ xfs_swap_change_owner(
 		if (error != -EAGAIN)
 			break;
 
-		error = xfs_trans_roll(tpp, NULL);
+		error = xfs_trans_roll(tpp);
 		if (error)
 			break;
 		tp = *tpp;
@@ -2109,11 +2124,31 @@ xfs_swap_extents(
 		ip->i_d.di_flags2 |= tip->i_d.di_flags2 & XFS_DIFLAG2_REFLINK;
 		tip->i_d.di_flags2 &= ~XFS_DIFLAG2_REFLINK;
 		tip->i_d.di_flags2 |= f & XFS_DIFLAG2_REFLINK;
+	}
+
+	/* Swap the cow forks. */
+	if (xfs_sb_version_hasreflink(&mp->m_sb)) {
+		xfs_extnum_t	extnum;
+
+		ASSERT(ip->i_cformat == XFS_DINODE_FMT_EXTENTS);
+		ASSERT(tip->i_cformat == XFS_DINODE_FMT_EXTENTS);
+
+		extnum = ip->i_cnextents;
+		ip->i_cnextents = tip->i_cnextents;
+		tip->i_cnextents = extnum;
+
 		cowfp = ip->i_cowfp;
 		ip->i_cowfp = tip->i_cowfp;
 		tip->i_cowfp = cowfp;
-		xfs_inode_set_cowblocks_tag(ip);
-		xfs_inode_set_cowblocks_tag(tip);
+
+		if (ip->i_cowfp && ip->i_cnextents)
+			xfs_inode_set_cowblocks_tag(ip);
+		else
+			xfs_inode_clear_cowblocks_tag(ip);
+		if (tip->i_cowfp && tip->i_cnextents)
+			xfs_inode_set_cowblocks_tag(tip);
+		else
+			xfs_inode_clear_cowblocks_tag(tip);
 	}
 
 	xfs_trans_log_inode(tp, ip,  src_log_flags);

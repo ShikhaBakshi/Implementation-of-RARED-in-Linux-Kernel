@@ -1,0 +1,1 @@
+cmd_security/integrity/evm/evm.o := rm -f security/integrity/evm/evm.o; ar rcSTPD security/integrity/evm/evm.o security/integrity/evm/evm_main.o security/integrity/evm/evm_crypto.o security/integrity/evm/evm_secfs.o security/integrity/evm/evm_posix_acl.o

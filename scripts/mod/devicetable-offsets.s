@@ -92,7 +92,7 @@
 	.globl	main
 	.type	main, @function
 main:
-.LFB20:
+.LFB26:
 	.file 1 "scripts/mod/devicetable-offsets.c"
 	.loc 1 9 0
 	.cfi_startproc
@@ -451,7 +451,7 @@ main:
 	.loc 1 93 0
 # 93 "scripts/mod/devicetable-offsets.c" 1
 	
-.ascii "->SIZE_input_device_id $192 sizeof(struct input_device_id)"	#
+.ascii "->SIZE_input_device_id $200 sizeof(struct input_device_id)"	#
 # 0 "" 2
 	.loc 1 94 0
 # 94 "scripts/mod/devicetable-offsets.c" 1
@@ -911,7 +911,7 @@ main:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE20:
+.LFE26:
 	.size	main, .-main
 	.section	.text.unlikely
 .LCOLDE0:
@@ -927,19 +927,20 @@ main:
 	.file 5 "./arch/x86/include/asm/jump_label.h"
 	.file 6 "./include/uapi/linux/uuid.h"
 	.file 7 "./include/linux/uuid.h"
-	.file 8 "./arch/x86/include/asm/string_64.h"
-	.file 9 "./include/asm-generic/int-ll64.h"
+	.file 8 "./arch/x86/include/asm/asm.h"
+	.file 9 "./arch/x86/include/asm/string_64.h"
+	.file 10 "./include/asm-generic/int-ll64.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x1fc
+	.long	0x209
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF30
-	.byte	0x1
 	.long	.LASF31
+	.byte	0x1
 	.long	.LASF32
+	.long	.LASF33
 	.long	.Ldebug_ranges0+0
 	.quad	0
 	.long	.Ldebug_line0
@@ -982,7 +983,7 @@ main:
 	.long	.LASF6
 	.uleb128 0x5
 	.string	"u64"
-	.byte	0x9
+	.byte	0xa
 	.byte	0x19
 	.long	0x65
 	.uleb128 0x2
@@ -1072,7 +1073,7 @@ main:
 	.byte	0x8
 	.long	0xe4
 	.uleb128 0xd
-	.long	.LASF33
+	.long	.LASF34
 	.uleb128 0xc
 	.byte	0x8
 	.long	0x11b
@@ -1101,12 +1102,12 @@ main:
 	.long	.LASF24
 	.byte	0x10
 	.byte	0x4
-	.value	0x114
+	.value	0x11b
 	.long	0x16b
 	.uleb128 0x10
 	.string	"key"
 	.byte	0x4
-	.value	0x115
+	.value	0x11c
 	.long	0x126
 	.byte	0
 	.byte	0
@@ -1152,32 +1153,39 @@ main:
 	.byte	0x19
 	.long	0x199
 	.uleb128 0x13
-	.long	.LASF34
+	.long	.LASF35
 	.byte	0x1
 	.byte	0x8
 	.long	0x50
-	.quad	.LFB20
-	.quad	.LFE20-.LFB20
+	.quad	.LFB26
+	.quad	.LFE26-.LFB26
 	.uleb128 0x1
 	.byte	0x9c
 	.uleb128 0x14
 	.long	.LASF27
 	.byte	0x8
-	.byte	0x5b
-	.long	0x150
-	.uleb128 0x14
-	.long	.LASF28
-	.byte	0x7
-	.byte	0x28
-	.long	0x1ea
+	.byte	0x90
+	.long	0x77
+	.uleb128 0x1
+	.byte	0x57
 	.uleb128 0x15
-	.long	0x18e
-	.uleb128 0x14
+	.long	.LASF28
+	.byte	0x9
+	.byte	0x7f
+	.long	0x150
+	.uleb128 0x15
 	.long	.LASF29
 	.byte	0x7
-	.byte	0x29
-	.long	0x1fa
+	.byte	0x28
+	.long	0x1f7
+	.uleb128 0x16
+	.long	0x18e
 	.uleb128 0x15
+	.long	.LASF30
+	.byte	0x7
+	.byte	0x29
+	.long	0x207
+	.uleb128 0x16
 	.long	0x1ac
 	.byte	0
 	.section	.debug_abbrev,"",@progbits
@@ -1446,11 +1454,28 @@ main:
 	.uleb128 0x13
 	.uleb128 0x3f
 	.uleb128 0x19
+	.uleb128 0x2
+	.uleb128 0x18
+	.byte	0
+	.byte	0
+	.uleb128 0x15
+	.uleb128 0x34
+	.byte	0
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.uleb128 0x3f
+	.uleb128 0x19
 	.uleb128 0x3c
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x15
+	.uleb128 0x16
 	.uleb128 0x26
 	.byte	0
 	.uleb128 0x49
@@ -1466,26 +1491,24 @@ main:
 	.byte	0
 	.value	0
 	.value	0
-	.quad	.LFB20
-	.quad	.LFE20-.LFB20
+	.quad	.LFB26
+	.quad	.LFE26-.LFB26
 	.quad	0
 	.quad	0
 	.section	.debug_ranges,"",@progbits
 .Ldebug_ranges0:
-	.quad	.LFB20
-	.quad	.LFE20
+	.quad	.LFB26
+	.quad	.LFE26
 	.quad	0
 	.quad	0
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF32:
-	.string	"/home/kajoljain/Desktop/Implementation-of-RARED-in-Linux-Kernel"
 .LASF16:
 	.string	"next"
 .LASF21:
 	.string	"static_key"
-.LASF30:
+.LASF31:
 	.ascii	"GNU C89 5.4.0 20160609 -mno-sse -mno-mmx -mno-sse2 -mno-3dno"
 	.ascii	"w -mno-avx -m64 -mno-80387 -mno-fp-ret-in-387 -mpreferred-st"
 	.ascii	"ack-boundary=3 -mskip-rax-setup -mtune=generic -mno-red-zone"
@@ -1496,21 +1519,25 @@ main:
 	.string	"hronous-unwind-tables -fno-delete-null-pointer-checks -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling-calls -fno-var-tracking-assignments -fno-strict-overflow -fconserve-stack --param allow-store-data-races=0 -fstack-protector-strong"
 .LASF19:
 	.string	"target"
+.LASF25:
+	.string	"guid_t"
 .LASF17:
 	.string	"counter"
 .LASF1:
 	.string	"unsigned char"
-.LASF29:
+.LASF30:
 	.string	"uuid_null"
 .LASF8:
 	.string	"long unsigned int"
 .LASF3:
 	.string	"short unsigned int"
-.LASF28:
+.LASF29:
 	.string	"guid_null"
 .LASF23:
 	.string	"jump_label_t"
-.LASF34:
+.LASF27:
+	.string	"current_stack_pointer"
+.LASF35:
 	.string	"main"
 .LASF24:
 	.string	"static_key_false"
@@ -1518,11 +1545,11 @@ main:
 	.string	"code"
 .LASF13:
 	.string	"atomic_t"
-.LASF33:
+.LASF34:
 	.string	"static_key_mod"
 .LASF4:
 	.string	"unsigned int"
-.LASF31:
+.LASF32:
 	.string	"scripts/mod/devicetable-offsets.c"
 .LASF26:
 	.string	"uuid_t"
@@ -1536,8 +1563,6 @@ main:
 	.string	"long long int"
 .LASF7:
 	.string	"__u8"
-.LASF25:
-	.string	"guid_t"
 .LASF10:
 	.string	"char"
 .LASF14:
@@ -1546,7 +1571,9 @@ main:
 	.string	"enabled"
 .LASF2:
 	.string	"short int"
-.LASF27:
+.LASF33:
+	.string	"/home/kajoljain/Desktop/linux-master"
+.LASF28:
 	.string	"mcsafe_key"
 .LASF11:
 	.string	"long int"
