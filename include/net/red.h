@@ -417,7 +417,7 @@ static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_v
 	p->target_max = qth_min + 13*delta;
         
 
-       //Set alpha and beta var
+       //Set temporary var to cal alpha and beta 
        
       int at_diff = qavg- p->target_max;
       int t_pro=p->target_max*4;
@@ -438,7 +438,7 @@ static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_v
 	if (qavg > p->target_max && p->max_P <= MAX_P_MAX)
 		p->max_P += at_diff/t_pro;  /* maxp = maxp + alpha */
 	else if (qavg < p->target_min && p->max_P >= MAX_P_MIN)
-		p->max_P*= (1-ta_diff/tmin_diff) ; /* maxp = maxp * Beta */
+		p->max_P= p->max_P*(1-(ta_diff/tmin_diff)) ; /* maxp = maxp * Beta */
 
 	max_p_delta = DIV_ROUND_CLOSEST(p->max_P, p->qth_delta);
 	max_p_delta = max(max_p_delta, 1U);
