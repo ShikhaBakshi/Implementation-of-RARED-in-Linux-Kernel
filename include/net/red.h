@@ -420,8 +420,8 @@ static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_v
        
         int r_delta = p->qth_max - p->qth_min;
         r_delta /= 25;
-	p->target_min = p->qth_min + 12*delta;
-	p->target_max = p->qth_min + 13*delta;
+	p->target_min = p->qth_min + 12*r_delta;
+	p->target_max = p->qth_min + 13*r_delta;
         
 
        //Set alpha and beta var
