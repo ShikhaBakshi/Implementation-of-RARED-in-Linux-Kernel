@@ -408,37 +408,39 @@ static inline void red_adaptative_algo(struct red_parms *p, struct red_vars *v)
 static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_vars *v)
 {
 	unsigned long qavg;
+
+	qavg = v->qavg;
+	if (red_is_idling(v))
+		qavg = red_calc_qavg_from_idle_time(p, v);
+      /* v->qavg is fixed point number with point at Wlog */
+	qavg >>= p->Wlog;
 	u32 max_p_delta;
-        //rared target setting
+        
+      //rared target setting
        
-        int r_delta = qth_max - qth_min;
+        int r_delta = p->qth_max - p->qth_min;
         r_delta /= 25;
-	p->target_min = qth_min + 12*delta;
-	p->target_max = qth_min + 13*delta;
+	p->target_min = p->qth_min + 12*delta;
+	p->target_max = p->qth_min + 13*delta;
         
 
-       //Set temporary var to cal alpha and beta 
+       //Set alpha and beta var
        
       int at_diff = qavg- p->target_max;
       int t_pro=p->target_max*4;
        at_diff*=p->max_P;
 
     int ta_diff= 17*(p->target_min-qavg);
-    int tmin_diff= 100*(p->target_min-qth_min);
+    int tmin_diff= 100*(p->target_min-p->qth_min);
 
      
         
-	qavg = v->qavg;
-	if (red_is_idling(v))
-		qavg = red_calc_qavg_from_idle_time(p, v);
 
-	/* v->qavg is fixed point number with point at Wlog */
-	qavg >>= p->Wlog;
 
 	if (qavg > p->target_max && p->max_P <= MAX_P_MAX)
 		p->max_P += at_diff/t_pro;  /* maxp = maxp + alpha */
 	else if (qavg < p->target_min && p->max_P >= MAX_P_MIN)
-		p->max_P= p->max_P*(1-(ta_diff/tmin_diff)) ; /* maxp = maxp * Beta */
+		p->max_P*= (1-ta_diff/tmin_diff) ; /* maxp = maxp * Beta */
 
 	max_p_delta = DIV_ROUND_CLOSEST(p->max_P, p->qth_delta);
 	max_p_delta = max(max_p_delta, 1U);
