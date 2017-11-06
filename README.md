@@ -3,10 +3,7 @@
 ## Assignment: #FP8	<br/>
 
 ### Overview		<br/>
-Refined Adaptive RED (RARED) [1] is an extension of ARED [2]. It inherits all the properties of ARED but with a minor improvement in adaptive setting of Pmax. This repository contains an implementation of RARED in the Linux kernel.
-The RARED algorithm is to maintain the average queue size near the specified target queue size.The resulting average queue length is quite sensitive to the level of congestion. In this paper, we propose the Refined Adaptive RED (RARED), as a solution for reducing the sensitivity to parameters that affect RED performance. Based on simulations, we observe that the RARED scheme
-improves overall performance of the network. In particular, the RARED scheme reduces packet drop rate and improves
-goodput
+Refined Adaptive RED (RARED) is an active queue management algorithm which is helpful in reducing packet drop rate and improves goodput.This repository contains an implementation of RARED in the Linux kernel.RARED[1] inherits all the properties of ARED[2] but with a minor improvement in adaptive setting of Pmax. The RARED algorithm is to maintain the average queue size near the specified target queue size.The resulting average queue length is quite sensitive to the level of congestion. The Refined Adaptive RED (RARED), is a solution for reducing the sensitivity to parameters that affect RED performance and it improves overall performance of the network.
 
 ### References         <br/>
 
