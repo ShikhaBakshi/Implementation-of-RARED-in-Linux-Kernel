@@ -1,3 +1,0 @@
-drivers/thermal/int340x_thermal/processor_thermal_device.ko
-drivers/thermal/int340x_thermal/processor_thermal_device.o
-

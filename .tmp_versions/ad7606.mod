@@ -1,3 +1,0 @@
-drivers/staging/iio/adc/ad7606.ko
-drivers/staging/iio/adc/ad7606.o
-
