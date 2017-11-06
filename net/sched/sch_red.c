@@ -59,6 +59,9 @@ static inline int red_use_harddrop(struct red_sched_data *q)
 static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
 		       struct sk_buff **to_free)
 {
+       
+       
+
 	struct red_sched_data *q = qdisc_priv(sch);
 	struct Qdisc *child = q->qdisc;
 	int ret;
@@ -66,6 +69,11 @@ static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
 	q->vars.qavg = red_calc_qavg(&q->parms,
 				     &q->vars,
 				     child->qstats.backlog);
+     
+//Call RARED function for calculating qavg       
+ if(1)
+red_refined_adaptative_algo(&q->parms,&q->vars);
+
 
 	if (red_is_idling(&q->vars))
 		red_end_of_idle_period(&q->vars);
@@ -109,8 +117,8 @@ static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
 congestion_drop:
 	qdisc_drop(skb, sch, to_free);
 	return NET_XMIT_CN;
-}
 
+}
 static struct sk_buff *red_dequeue(struct Qdisc *sch)
 {
 	struct sk_buff *skb;
