@@ -36,7 +36,7 @@ sudo apt-get install python-dev python-setuptools python-matplotlib python-pip p
 ```
 4. Download Flent
 ```
-https://github.com/tohojo/flent
+[https://github.com/tohojo/flent]
 ```
 5. Install flent in client machine
 ```
@@ -57,5 +57,5 @@ sudo make install
 
 [1] Tae-hoon Kim, Kee-hyun Lee, "Refined Adaptive RED in TCP/IP Networks", SICE-ICASE, 2006. International Joint Conference, 2006
 
-[2] S. Floyd, R. Gummadi, and S. Shenker, "Adaptive RED: An Algorithm for Increasing the Robustness of RED's Active Queue Management,", http://www.icir.org/floyd/papers/adaptiveRed.pdf.
+[2] S. Floyd, R. Gummadi, and S. Shenker, "Adaptive RED: An Algorithm for Increasing the Robustness of RED's Active Queue Management, http://www.icir.org/floyd/papers/adaptiveRed.pdf.
 
