@@ -55,12 +55,11 @@ tc qdisc add dev "interface" root "rared" limits 100000 avgpkt 1000
 ```
 ### Command to run flent 
 ```
-./run-flent rrul -p [PLOT_NAME] -l 160 -H [SERVER_IP] --test-parameter bandwidth=800M --test-parameter
-qdisc_stats_hosts=[ROUTER_SSH_IP] --test-parameter qdisc_stats_interfaces=[ROUTER_AQM_INTERFACE] 
+./run-flent rrul -p [mention type of graph] -l 160 -H [SERVER_IP] --test-parameter bandwidth=800M --test-parameter
+qdisc_stats_hosts=[ROUTER_SSH_IP using which ssh connection is setup] --test-parameter qdisc_stats_interfaces=[ROUTER_AQM_INTERFACE: Interface name of the router where AQM is installed] 
 --test-parameter upload_streams=num_cpus --test-parameter download_streams=num_cpus -t 
-RARED -o ~/Desktop/RARED/test_result.png
+RARED -o [ addr where u want to save result with image file name Ex:~/Desktop/RARED/test_result.png]
 ```
-    
 
 
 ### References         <br/>
