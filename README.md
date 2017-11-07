@@ -49,7 +49,17 @@ sudo make install
 7. Install the modified kernel with RARED algorithm in router machine
 
 8. Run Flent in client machine for plotting different graphs
-   
+### Set your aqm on router machine using
+```
+tc qdisc add dev "interface" root "rared" limits 100000 avgpkt 1000
+```
+### Command to run flent 
+```
+./run-flent rrul -p [PLOT_NAME] -l 160 -H [SERVER_IP] --test-parameter bandwidth=800M --test-parameter
+qdisc_stats_hosts=[ROUTER_SSH_IP] --test-parameter qdisc_stats_interfaces=[ROUTER_AQM_INTERFACE] 
+--test-parameter upload_streams=num_cpus --test-parameter download_streams=num_cpus -t 
+RARED -o ~/Desktop/RARED/test_result.png
+```
     
 
 
