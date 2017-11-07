@@ -36,7 +36,7 @@ sudo apt-get install python-dev python-setuptools python-matplotlib python-pip p
 ```
 4. Download Flent
 ```
-[https://github.com/tohojo/flent]
+https://github.com/tohojo/flent
 ```
 5. Install flent in client machine
 ```
