@@ -1,1 +1,0 @@
-cmd_security/integrity/built-in.o :=  rm -f security/integrity/built-in.o; ar rcSTPD security/integrity/built-in.o security/integrity/integrity.o security/integrity/ima/built-in.o security/integrity/evm/built-in.o 

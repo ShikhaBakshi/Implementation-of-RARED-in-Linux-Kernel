@@ -1,1 +1,0 @@
-cmd_security/keys/encrypted-keys/built-in.o :=  rm -f security/keys/encrypted-keys/built-in.o; ar rcSTPD security/keys/encrypted-keys/built-in.o security/keys/encrypted-keys/encrypted-keys.o 
