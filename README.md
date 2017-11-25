@@ -3,7 +3,7 @@
 ## Assignment: #FP8	<br/>
 
 ### Overview		<br/>
-Refined Adaptive RED (RARED) is an active queue management algorithm which is helpful in reducing packet drop rate and improves goodput.This repository contains an implementation of RARED in the Linux kernel.RARED inherits all the properties of ARED but with a minor improvement in adaptive setting of Pmax. The RARED algorithm is to maintain the average queue size near the specified target queue size.The resulting average queue length is quite sensitive to the level of congestion. The Refined Adaptive RED (RARED), is a solution for reducing the sensitivity to parameters that affects the performance of RED and improves the overall performance of the network.
+Refined Adaptive RED (RARED) [1] is an Active Queue Management algorithm which is helpful in reducing packet drop rate and improves goodput. This repository contains an implementation of RARED in the Linux kernel. RARED inherits all the properties of Adaptive RED (ARED) [2] but with a minor improvement in adaptive setting of Pmax. RARED algorithm is to maintain the average queue size near the specified target queue size. The resulting average queue length is quite sensitive to the level of congestion. RARED is a solution for reducing the sensitivity to parameters that affects the performance of RED and improves the overall performance of the network.
 
 ### Steps to build modified kernel with RARED algorithm
 1. Clone this repository in your local machine.
@@ -24,7 +24,7 @@ make modules_install
 ```
 make install
 ```
-### Testing of RARED Algorithm using Flent(Flexible Network Tester)
+### Testing of RARED Algorithm using Flexible Network Tester (Flent) [3]
 1. Setup a physical topology of three nodes:
 ```
 Client <---> Router <---> Server
@@ -69,3 +69,4 @@ RARED -o [ addr where u want to save result with image file name Ex:~/Desktop/RA
 
 [2] S. Floyd, R. Gummadi, and S. Shenker, "Adaptive RED: An Algorithm for Increasing the Robustness of RED's Active Queue Management, http://www.icir.org/floyd/papers/adaptiveRed.pdf.
 
+[3] Flent: The FLExible Network Tester (https://flent.org/)
