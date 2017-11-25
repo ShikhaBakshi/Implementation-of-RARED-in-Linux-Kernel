@@ -204,6 +204,43 @@ static inline void red_set_parms(struct red_parms *p,
 	if (stab)
 		memcpy(p->Stab, stab, sizeof(p->Stab));
 }
+static inline void rared_red_set_parms(struct red_parms *p,
+				 u32 qth_min, u32 qth_max, u8 Wlog, u8 Plog,
+				 u8 Scell_log, u8 *stab, u32 max_P)
+{
+	int delta = qth_max - qth_min;
+	u32 max_p_delta;
+
+	p->qth_min	= qth_min << Wlog;
+	p->qth_max	= qth_max << Wlog;
+	p->Wlog		= Wlog;
+	p->Plog		= Plog;
+	if (delta < 0)
+		delta = 1;
+	p->qth_delta	= delta;
+	if (!max_P) {
+		max_P = red_maxp(Plog);
+		max_P *= delta; /* max_P = (qth_max - qth_min)/2^Plog */
+	}
+	p->max_P = max_P;
+	max_p_delta = max_P / delta;
+	max_p_delta = max(max_p_delta, 1U);
+	p->max_P_reciprocal  = reciprocal_value(max_p_delta);
+
+	/* RED Adaptative target :
+	 * [min_th + 0.4*(min_th - max_th),
+	 *  min_th + 0.6*(min_th - max_th)].
+	 */
+	delta /= 25;
+	p->target_min = qth_min + 12*delta;
+	p->target_max = qth_min + 13*delta;
+
+	p->Scell_log	= Scell_log;
+	p->Scell_max	= (255 << Scell_log);
+
+	if (stab)
+		memcpy(p->Stab, stab, sizeof(p->Stab));
+}
 
 static inline int red_is_idling(const struct red_vars *v)
 {
@@ -409,7 +446,6 @@ static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_v
 {
 	unsigned long qavg;
 	u32 max_p_delta;
-	int r_delta; /*maxth-minth*/
 	int at_diff;  /* qavg-minth*/
 	int t_pro;
 	int ta_diff; /*target-qavg*/
@@ -418,30 +454,17 @@ static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_v
 	qavg = v->qavg;
 	if (red_is_idling(v))
 		qavg = red_calc_qavg_from_idle_time(p, v);
-      /* v->qavg is fixed point number with point at Wlog */
+        /* v->qavg is fixed point number with point at Wlog */
 	qavg >>= p->Wlog;
 	
-        
-      //rared target setting
+        //Set alpha and beta var
        
-        r_delta = p->qth_max - p->qth_min;
-        r_delta /= 25;
-	p->target_min = p->qth_min + 12*r_delta; /*min_th + 0.48*(max_th - min_th)*/
-	p->target_max = p->qth_min + 13*r_delta;/*min_th + 0.52*(max_th - min_th)*/
-        
+        at_diff = qavg- p->target_max;
+        t_pro=p->target_max*4;
+        at_diff*=p->max_P;
 
-       //Set alpha and beta var
-       
-      at_diff = qavg- p->target_max;
-      t_pro=p->target_max*4;
-      at_diff*=p->max_P;
-
-     ta_diff= 17*(p->target_min-qavg);
-     tmin_diff= 100*(p->target_min-p->qth_min);
-
-     
-        
-
+        ta_diff= 17*(p->target_min-qavg);
+        tmin_diff= 100*(p->target_min-p->qth_min);
 
 	if (qavg > p->target_max && p->max_P <= MAX_P_MAX)
 		p->max_P += at_diff/t_pro;  /* maxp = maxp + alpha ; alpha=0.25*((qavg-target)/target)*max_P*/
