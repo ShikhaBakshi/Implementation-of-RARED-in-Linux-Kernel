@@ -72,9 +72,9 @@ static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
      
 //Call RARED function for calculating qavg       
  
-	bool rared_enable=true;
+	/*bool rared_enable=true;
 	if(rared_enable)
-                red_refined_adaptative_algo(&q->parms,&q->vars);
+                red_refined_adaptative_algo(&q->parms,&q->vars);*/
 
 
 	if (red_is_idling(&q->vars))
@@ -215,7 +215,7 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt)
 	
 	//Set target range according to RARED
 	
-	bool rared_enable=true;
+	/*bool rared_enable=true;
 	if(rared_enable)
 	{
 		rared_red_set_parms(&q->parms,
@@ -223,8 +223,8 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt)
 		      ctl->Plog, ctl->Scell_log,
 		      nla_data(tb[TCA_RED_STAB]),
 		      max_P);
-	}	
-	red_set_parms(&q->parms,
+	}*/	
+	rared_red_set_parms(&q->parms,
 		      ctl->qth_min, ctl->qth_max, ctl->Wlog,
 		      ctl->Plog, ctl->Scell_log,
 		      nla_data(tb[TCA_RED_STAB]),
@@ -241,7 +241,17 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt)
 	sch_tree_unlock(sch);
 	return 0;
 }
+static inline void red_refined_adaptative_timer(unsigned long arg)
+{
+	struct Qdisc *sch = (struct Qdisc *)arg;
+	struct red_sched_data *q = qdisc_priv(sch);
+	spinlock_t *root_lock = qdisc_lock(qdisc_root_sleeping(sch));
 
+	spin_lock(root_lock);
+	red_refined_adaptative_algo(&q->parms, &q->vars);
+	mod_timer(&q->adapt_timer, jiffies + HZ/2);
+	spin_unlock(root_lock);
+}
 static inline void red_adaptative_timer(unsigned long arg)
 {
 	struct Qdisc *sch = (struct Qdisc *)arg;
@@ -259,7 +269,7 @@ static int red_init(struct Qdisc *sch, struct nlattr *opt)
 	struct red_sched_data *q = qdisc_priv(sch);
 
 	q->qdisc = &noop_qdisc;
-	setup_timer(&q->adapt_timer, red_adaptative_timer, (unsigned long)sch);
+	setup_timer(&q->adapt_timer, red_refined_adaptative_timer, (unsigned long)sch);
 	return red_change(sch, opt);
 }
 
