@@ -227,9 +227,9 @@ static inline void rared_red_set_parms(struct red_parms *p,
 	max_p_delta = max(max_p_delta, 1U);
 	p->max_P_reciprocal  = reciprocal_value(max_p_delta);
 
-	/* RED Adaptative target :
-	 * [min_th + 0.4*(min_th - max_th),
-	 *  min_th + 0.6*(min_th - max_th)].
+	/* Refined Adaptative RED target :
+	 * [min_th + 0.48*(min_th - max_th),
+	 *  min_th + 0.52*(min_th - max_th)].
 	 */
 	delta /= 25;
 	p->target_min = qth_min + 12*delta;
