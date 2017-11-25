@@ -71,8 +71,10 @@ static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
 				     child->qstats.backlog);
      
 //Call RARED function for calculating qavg       
- if(1)
-red_refined_adaptative_algo(&q->parms,&q->vars);
+ 
+	bool rared_enable=true;
+	if(rared_enable)
+                red_refined_adaptative_algo(&q->parms,&q->vars);
 
 
 	if (red_is_idling(&q->vars))
@@ -210,7 +212,18 @@ static int red_change(struct Qdisc *sch, struct nlattr *opt)
 		qdisc_destroy(q->qdisc);
 		q->qdisc = child;
 	}
-
+	
+	//Set target range according to RARED
+	
+	bool rared_enable=true;
+	if(rared_enable)
+	{
+		rared_red_set_parms(&q->parms,
+		      ctl->qth_min, ctl->qth_max, ctl->Wlog,
+		      ctl->Plog, ctl->Scell_log,
+		      nla_data(tb[TCA_RED_STAB]),
+		      max_P);
+	}	
 	red_set_parms(&q->parms,
 		      ctl->qth_min, ctl->qth_max, ctl->Wlog,
 		      ctl->Plog, ctl->Scell_log,
