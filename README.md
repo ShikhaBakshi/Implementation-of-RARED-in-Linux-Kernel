@@ -49,7 +49,7 @@ sudo make install
 7. Install the modified kernel with RARED algorithm in router machine
 
 8. Run Flent in client machine for plotting different graphs
-### Set your aqm on router machine using
+### Set your AQM on router machine using
 ```
 tc qdisc add dev "interface" root red limits 100000 avpkt 1000
 ```
