@@ -30,7 +30,7 @@ make install
 Client <---> Router <---> Server
 ```
 2. Create a separate passwordless SSH connection between client and router machines, so that Flent can collect queue statistics from the router machine
-3. Install all required dependency for flent
+3. Install all required dependency for Flent
 ```
 sudo apt-get install python-dev python-setuptools python-matplotlib python-pip pyqt4-dev-tools netperf
 ```
@@ -38,7 +38,7 @@ sudo apt-get install python-dev python-setuptools python-matplotlib python-pip p
 ```
 https://github.com/tohojo/flent
 ```
-5. Install flent in client machine
+5. Install Flent in client machine
 ```
 cd flent-master
 make
@@ -53,7 +53,7 @@ sudo make install
 ```
 tc qdisc add dev "interface" root red limits 100000 avpkt 1000
 ```
-### Command to run flent 
+### Command to run Flent 
 ```
 ./run-flent rrul -p [mention type of graph] -l 160 -H [SERVER_IP] --test-parameter bandwidth=800M --test-parameter
 qdisc_stats_hosts=[ROUTER_SSH_IP using which ssh connection is setup] --test-parameter 
