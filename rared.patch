@@ -1,0 +1,99 @@
+diff -ruN Original_linux_code/include/net/red.h with_change/include/net/red.h
+--- Original_linux_code/include/net/red.h	2017-11-06 02:35:14.000000000 +0530
++++ with_change/include/net/red.h	2017-11-06 21:31:33.850767869 +0530
+@@ -1,4 +1,3 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __NET_SCHED_RED_H
+ #define __NET_SCHED_RED_H
+ 
+@@ -405,3 +404,51 @@
+ 	p->max_P_reciprocal = reciprocal_value(max_p_delta);
+ }
+ #endif
++
++static inline void red_refined_adaptative_algo(struct red_parms *p, struct red_vars *v)
++{
++	unsigned long qavg;
++	u32 max_p_delta;
++	int r_delta; /*maxth-minth*/
++	int at_diff;  /* qavg-minth*/
++	int t_pro;
++	int ta_diff; /*target-qavg*/
++	int tmin_diff;
++
++	qavg = v->qavg;
++	if (red_is_idling(v))
++		qavg = red_calc_qavg_from_idle_time(p, v);
++      /* v->qavg is fixed point number with point at Wlog */
++	qavg >>= p->Wlog;
++	
++        
++      //rared target setting
++       
++        r_delta = p->qth_max - p->qth_min;
++        r_delta /= 25;
++	p->target_min = p->qth_min + 12*r_delta; /*min_th + 0.48*(max_th - min_th)*/
++	p->target_max = p->qth_min + 13*r_delta;/*min_th + 0.52*(max_th - min_th)*/
++        
++
++       //Set alpha and beta var
++       
++      at_diff = qavg- p->target_max;
++      t_pro=p->target_max*4;
++      at_diff*=p->max_P;
++
++     ta_diff= 17*(p->target_min-qavg);
++     tmin_diff= 100*(p->target_min-p->qth_min);
++
++     
++        
++
++
++	if (qavg > p->target_max && p->max_P <= MAX_P_MAX)
++		p->max_P += at_diff/t_pro;  /* maxp = maxp + alpha ; alpha=0.25*((qavg-target)/target)*max_P*/
++	else if (qavg < p->target_min && p->max_P >= MAX_P_MIN)
++		p->max_P*= (1-ta_diff/tmin_diff) ; /* maxp = maxp * Beta ; Beta=1-(0.17*(target-avg)/(trget-min_th))*/
++
++	max_p_delta = DIV_ROUND_CLOSEST(p->max_P, p->qth_delta);
++	max_p_delta = max(max_p_delta, 1U);
++	p->max_P_reciprocal = reciprocal_value(max_p_delta);
++}
+diff -ruN Original_linux_code/net/sched/sch_red.c with_change/net/sched/sch_red.c
+--- Original_linux_code/net/sched/sch_red.c	2017-11-06 02:35:14.000000000 +0530
++++ with_change/net/sched/sch_red.c	2017-11-06 21:36:57.319442038 +0530
+@@ -59,6 +59,9 @@
+ static int red_enqueue(struct sk_buff *skb, struct Qdisc *sch,
+ 		       struct sk_buff **to_free)
+ {
++       
++       
++
+ 	struct red_sched_data *q = qdisc_priv(sch);
+ 	struct Qdisc *child = q->qdisc;
+ 	int ret;
+@@ -66,6 +69,11 @@
+ 	q->vars.qavg = red_calc_qavg(&q->parms,
+ 				     &q->vars,
+ 				     child->qstats.backlog);
++     
++//Call RARED function for calculating qavg       
++red_refined_adaptative_algo(&q->parms,&q->vars);
++
+ 
+ 	if (red_is_idling(&q->vars))
+ 		red_end_of_idle_period(&q->vars);
+@@ -109,8 +117,8 @@
+ congestion_drop:
+ 	qdisc_drop(skb, sch, to_free);
+ 	return NET_XMIT_CN;
+-}
+ 
++}
+ static struct sk_buff *red_dequeue(struct Qdisc *sch)
+ {
+ 	struct sk_buff *skb;
+@@ -366,3 +374,4 @@
+ module_exit(red_module_exit)
+ 
+ MODULE_LICENSE("GPL");
++
